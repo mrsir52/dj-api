@@ -1,30 +1,42 @@
-const { GraphQLServer } = require('graphql-yoga')
+const {GraphQLServer} = require('graphql-yoga')
 const fetch = require('node-fetch')
 
 
-const URL = `https://icanhazdadjoke.com/`
+const DADURL = `https://icanhazdadjoke.com/`
+const CHUCKURL = `https://api.chucknorris.io/jokes/random`
 
 
 const typeDefs = `
 type Query {
-  getJoke: results
+  getChuckJoke: chuckresults
+  getDadJoke: dadresults
 }
 
-type results {
+type dadresults {
   status: String
   joke: String
+}
+
+type chuckresults {
+  icon_url: String
+  value: String
 }
 `
 
 const resolvers = {
     Query: {
-        async getJoke() {
-            return await fetch(`${URL}`, {
+        async getDadJoke() {
+            return await fetch(`${DADURL}`, {
                 headers: {
                     "accept": "application/json"
                 }
             }).then(res => res.json())
         },
+        async getChuckJoke() {
+            return await fetch(`${CHUCKURL}`
+            ).then(res => res.json())
+        },
+
     },
 }
 
